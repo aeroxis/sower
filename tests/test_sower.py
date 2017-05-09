@@ -5,7 +5,7 @@ import tempfile
 import unittest
 import yaml
 
-from sower.farm import (file_size_in_bytes, mkdir, mkfile, mksymlink, sow)
+from sower.sow import (file_size_in_bytes, mkdir, mkfile, mksymlink, perform_sow)
 from sower.utils import Loader
 
 
@@ -108,7 +108,7 @@ class TestMakeSymlink(unittest.TestCase):
         self.assertTrue(os.path.exists(self.source_file))
         self.assertTrue(os.path.exists(self.link_file))
 
-class TestMakeForest(unittest.TestCase):
+class TestSow(unittest.TestCase):
 
     def setUp(self):
 
@@ -180,7 +180,7 @@ sower:
 
     def test_sow(self):
 
-        sow(self.test_dir, self.contract)
+        perform_sow(self.test_dir, self.contract)
 
         # assert that the directories are created properly
         self.assert_path_exists('bin')

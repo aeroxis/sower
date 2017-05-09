@@ -85,7 +85,7 @@ the following:
 
 .. code:: bash
 
-    $ sower /home/davydany/foobar /tmp/sower-contract.yml
+    $ sower sow /home/davydany/foobar /tmp/sower-contract.yml
 
 This would create the following structure:
 

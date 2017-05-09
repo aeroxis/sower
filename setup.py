@@ -16,10 +16,14 @@ setup(
     license='MIT',
     packages=find_packages('src'),
     package_dir={'': 'src'},
+    install_requires=[
+        'PyYAML==3.12',
+        'click>=6.7',
+    ],
     url='http://github.com/aeroxis/sower',
       entry_points="""
             [console_scripts]
-                sower = sower.farm:sower
+                sower = sower.sow:sower
       """,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
