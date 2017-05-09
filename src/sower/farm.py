@@ -92,7 +92,7 @@ def sow(root, contract):
         if item_type is 'dir':
 
             mkdir(path_to_item)
-            sow(contents, path_to_item)
+            sow(path_to_item, contents)
 
         elif item_type == 'file':
 
@@ -112,11 +112,11 @@ def sow(root, contract):
             mksymlink(target, path_to_item)
 
 @click.group()
-def farmer():
+def sower():
 
     pass
 
-@farmer.command()
+@sower.command()
 @click.argument('root', type=click.Path(exists=False))
 @click.argument('path_to_contract', type=click.Path(exists=True))
 def farm(root, path_to_contract):
@@ -137,13 +137,13 @@ def farm(root, path_to_contract):
             Loader=Loader)
         
         # get root element 'farmer'
-        instructions_for_farmer = loaded_contract.get('farmer', {})
-        if not instructions_for_farmer:
+        sower_instructions = loaded_contract.get('sower', {})
+        if not sower_instructions:
             click.secho('You need to have a root level key called "farmer".', fg='red')
             return -1
 
         # get the plan
-        plan = instructions_for_farmer.get('plan')
+        plan = sower_instructions.get('plan')
         if not plan:
             click.secho('You need to have a 2nd level key called "plan" under "farmer" with the resources you would like to create.', fg='red')
             return -1

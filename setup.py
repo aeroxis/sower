@@ -16,7 +16,7 @@ setup(
     license='MIT',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    url='http://github.com/aeroxis/farmer',
+    url='http://github.com/aeroxis/sower',
       entry_points="""
             [console_scripts]
                 sower = sower.farm:sower

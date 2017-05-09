@@ -112,10 +112,10 @@ class TestMakeForest(unittest.TestCase):
 
     def setUp(self):
 
-        self.test_dir = tempfile.mkdtemp('_farmer_test')
+        self.test_dir = tempfile.mkdtemp('_sower_test')
         self.contract = yaml.load("""
 ---
-farmer:
+sower:
     plan:
         bin:
             start.sh:
@@ -143,7 +143,7 @@ farmer:
                     type: symlink
                     target: ../foobar/main.py
 
-        """, Loader=Loader)['farmer']['plan']
+        """, Loader=Loader)['sower']['plan']
 
     def tearDown(self):
         
