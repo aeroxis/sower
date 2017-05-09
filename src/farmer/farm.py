@@ -50,8 +50,9 @@ def mkfile(path, contents, user, group, size):
         # convert size to bytes
         size_in_bytes = file_size_in_bytes(size)
         with open(path, 'wb') as filehandle:
+            content = '\0'
             filehandle.seek(size_in_bytes-1)
-            filehandle.write(bytes('\0'))
+            filehandle.write(content.encode('utf-8'))
     else:
         # create file with contents
         with open(path, 'w') as filehandle:
