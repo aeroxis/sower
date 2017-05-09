@@ -8,6 +8,9 @@ How to Install
 
     $ pip install sower
 
+Why Do You Need Sower?
+**********************
+
 
 The Problem
 -----------
@@ -18,8 +21,8 @@ testing, especially if your application that you're testing is supposed to
 be tested for how it manages a set of files based on their directory 
 structure.
 
-The Solution
-------------
+The Solution - Part 1
+---------------------
 
 Sower is the solution for this problem! You simply define a *contract* in
 YAML like the following file:
@@ -83,3 +86,55 @@ This would create the following structure:
 
     4 directories, 6 files
 
+
+The Solution - Part 2
+---------------------
+
+Now, suppose you need to do this in your integration tests that use python's `unittest`. You
+can still leverage this with the Sower API.
+
+You would have something like this in your test's `setUp` method.
+
+.. code:: python
+
+    import tempfile
+    import unittest
+    from sower.farm import sow
+
+    class TestMyApp(unittest.TestCase):
+
+        def setUp(self):
+
+            self.root = tempfile.mkdtemp('_farmer_test')
+            self.contract = """
+
+---
+sower:
+    plan:
+        bin:
+            start.sh:
+                type: file
+                content: "echo 'Starting foobar'"
+            stop.sh:
+                type: file
+                content: "echo 'Stopping foobar'"
+        data:
+            test-data.tar.gz:
+                type: file
+                content: "!random!"
+                size: 1Mb
+        src:
+            foobar:
+                __init__.py:
+                    type: file
+                    content: "# just a comment"
+                main.py:
+                    type: file
+                    content: >
+                        import os\n
+                        print('Foo Bar: %s' % os.path.abspath('.'))\n\n
+                link_main.py:
+                    type: symlink
+                    target: ../foobar/main.py
+            """
+            sow(self.contract, self.root)
