@@ -28,7 +28,7 @@ How to Install
     $ pip install sower
 
 Why Do You Need Sower?
-**********************
+======================
 
 
 The Problem
