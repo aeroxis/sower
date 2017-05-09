@@ -1,5 +1,23 @@
+.. image:: https://raw.githubusercontent.com/aeroxis/sower/master/img/sower-logo.png
+    :alt: Sultan logo
+    :align: right
+    :width: 300px
+
+.. image:: https://badge.fury.io/py/sower.png
+    :target: https://badge.fury.io/py/sower
+
+.. image:: https://travis-ci.org/aeroxis/sower.svg?branch=master
+    :target: https://travis-ci.org/aeroxis/sower
+
+.. image:: http://img.shields.io/:license-mit-blue.svg
+  :alt: MIT License
+  :target: http://doge.mit-license.org
+
 Sower
 =====
+
+**Sower "plants" directories, files and symlinks on your filesystem based on a contract you tell it.**
+
 
 How to Install
 --------------
