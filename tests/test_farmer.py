@@ -5,8 +5,8 @@ import tempfile
 import unittest
 import yaml
 
-from forester.forest_maker import (file_size_in_bytes, mkdir, mkfile, mksymlink, make_forest)
-from forester.utils import Loader
+from farmer.farm import (file_size_in_bytes, mkdir, mkfile, mksymlink, make_forest)
+from farmer.utils import Loader
 
 
 class TestFileSizeInBytes(unittest.TestCase):
@@ -112,10 +112,10 @@ class TestMakeForest(unittest.TestCase):
 
     def setUp(self):
 
-        self.test_dir = tempfile.mkdtemp('_forester_test')
+        self.test_dir = tempfile.mkdtemp('_farmer_test')
         self.contract = yaml.load("""
 ---
-forester:
+farmer:
     bin:
         start.sh:
             type: file
@@ -142,7 +142,7 @@ forester:
                 type: symlink
                 target: ../foobar/main.py
 
-        """, Loader=Loader)['forester']
+        """, Loader=Loader)['farmer']
 
     def tearDown(self):
         

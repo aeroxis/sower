@@ -7,8 +7,8 @@ with open("./VERSION") as f:
     VERSION = f.read().strip()
 
 setup(
-    name='forester',
-    description='make and manage directory trees.',
+    name='farmer',
+    description='farmer plants directories, files and symlinks on your filesystem based on a contract you tell it.',
     long_description=LONG_DESCRIPTION,
     version=VERSION,
     author='David Daniel',
@@ -16,10 +16,10 @@ setup(
     license='MIT',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    url='http://github.com/aeroxis/forester',
+    url='http://github.com/aeroxis/farmer',
       entry_points="""
             [console_scripts]
-                forester = forester.forest_maker:main
+                farmer = farmer.farm:main
       """,
     classifiers=[
         "Development Status :: 5 - Production/Stable",

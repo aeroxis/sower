@@ -10,28 +10,11 @@ import yaml
 
 from sultan.api import Sultan
 
-from forester.utils import Loader
+from farmer.utils import Loader
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-logger = logging.getLogger('forester')
+logger = logging.getLogger('farmer')
 
-"""
-# sample contract
-# ---------------
-
----
-forester:
-  src:
-    main.py:
-      type: file
-      contents: ''
-    link_to_main.py:
-      type: link
-      target: ./main.py
-    lib:
-      type: dir
-      contents: "foobar"
-"""
 
 FILE_SIZE_REGEX = "(?P<numeric>[\d]+){1}(?P<si_unit>(k|M|G|T|P|E|Z|Y)){0,1}b"
 FILE_SIZE_REGEX_PATTERN = re.compile(FILE_SIZE_REGEX)
@@ -142,7 +125,7 @@ def main(path_to_contract, root):
 
         loaded_contract = yaml.load(
             textwrap.dedent(contract),
-            Loader=Loader).get('forester')
+            Loader=Loader).get('farmer')
 
         if loaded_contract:
             make_forest(loaded_contract, root)
