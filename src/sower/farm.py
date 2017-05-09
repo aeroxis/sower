@@ -78,7 +78,7 @@ def mksymlink(target_path, link_path):
 
     os.symlink(target_path, link_path)
 
-def sow(contract, root):
+def sow(root, contract):
     """
     Makes a forest of directories, files, symlinks and any other file-like objects
     on the given directory 'root', based on what is specified in the contract.
@@ -149,6 +149,7 @@ def farm(root, path_to_contract):
             return -1
 
         if loaded_contract:
-            sow(plan, root)
+            sow(root, plan)
+            
         else:
             click.secho('The Contract File is Empty.', fg='red')

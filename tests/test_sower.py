@@ -180,7 +180,7 @@ farmer:
 
     def test_sow(self):
 
-        sow(self.contract, self.test_dir)
+        sow(self.test_dir, self.contract)
 
         # assert that the directories are created properly
         self.assert_path_exists('bin')
@@ -201,5 +201,4 @@ farmer:
             ["import os\n", "print('Foo Bar: %s' % os.path.abspath('.'))\n"])
 
         # assert that the symlinks are valid
-        print("test_dir: ", self.test_dir)
         self.assert_valid_symlink('src/foobar/main.py', 'src/foobar/link_main.py')
