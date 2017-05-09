@@ -2,6 +2,7 @@
     :alt: Sultan logo
     :align: right
     :width: 300px
+    :scale: 50%
 
 .. image:: https://badge.fury.io/py/sower.png
     :target: https://badge.fury.io/py/sower
