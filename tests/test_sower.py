@@ -5,8 +5,8 @@ import tempfile
 import unittest
 import yaml
 
-from forester.forest_maker import (file_size_in_bytes, mkdir, mkfile, mksymlink, make_forest)
-from forester.utils import Loader
+from sower.farm import (file_size_in_bytes, mkdir, mkfile, mksymlink, sow)
+from sower.utils import Loader
 
 
 class TestFileSizeInBytes(unittest.TestCase):
@@ -112,37 +112,38 @@ class TestMakeForest(unittest.TestCase):
 
     def setUp(self):
 
-        self.test_dir = tempfile.mkdtemp('_forester_test')
+        self.test_dir = tempfile.mkdtemp('_sower_test')
         self.contract = yaml.load("""
 ---
-forester:
-    bin:
-        start.sh:
-            type: file
-            content: "echo 'Starting foobar'"
-        stop.sh:
-            type: file
-            content: "echo 'Stopping foobar'"
-    data:
-        test-data.tar.gz:
-            type: file
-            content: "!random!"
-            size: 1Mb
-    src:
-        foobar:
-            __init__.py:
+sower:
+    plan:
+        bin:
+            start.sh:
                 type: file
-                content: "# just a comment"
-            main.py:
+                content: "echo 'Starting foobar'"
+            stop.sh:
                 type: file
-                content: >
-                    import os\n
-                    print('Foo Bar: %s' % os.path.abspath('.'))\n\n
-            link_main.py:
-                type: symlink
-                target: ../foobar/main.py
+                content: "echo 'Stopping foobar'"
+        data:
+            test-data.tar.gz:
+                type: file
+                content: "!random!"
+                size: 1Mb
+        src:
+            foobar:
+                __init__.py:
+                    type: file
+                    content: "# just a comment"
+                main.py:
+                    type: file
+                    content: >
+                        import os\n
+                        print('Foo Bar: %s' % os.path.abspath('.'))\n\n
+                link_main.py:
+                    type: symlink
+                    target: ../foobar/main.py
 
-        """, Loader=Loader)['forester']
+        """, Loader=Loader)['sower']['plan']
 
     def tearDown(self):
         
@@ -177,9 +178,9 @@ forester:
             self.path_to(target),
             os.readlink(self.path_to(link)))
 
-    def test_make_forest(self):
+    def test_sow(self):
 
-        make_forest(self.contract, self.test_dir)
+        sow(self.test_dir, self.contract)
 
         # assert that the directories are created properly
         self.assert_path_exists('bin')
@@ -200,5 +201,4 @@ forester:
             ["import os\n", "print('Foo Bar: %s' % os.path.abspath('.'))\n"])
 
         # assert that the symlinks are valid
-        print("test_dir: ", self.test_dir)
         self.assert_valid_symlink('src/foobar/main.py', 'src/foobar/link_main.py')

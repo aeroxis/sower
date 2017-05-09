@@ -10,28 +10,11 @@ import yaml
 
 from sultan.api import Sultan
 
-from forester.utils import Loader
+from sower.utils import Loader
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
-logger = logging.getLogger('forester')
+logger = logging.getLogger('farmer')
 
-"""
-# sample contract
-# ---------------
-
----
-forester:
-  src:
-    main.py:
-      type: file
-      contents: ''
-    link_to_main.py:
-      type: link
-      target: ./main.py
-    lib:
-      type: dir
-      contents: "foobar"
-"""
 
 FILE_SIZE_REGEX = "(?P<numeric>[\d]+){1}(?P<si_unit>(k|M|G|T|P|E|Z|Y)){0,1}b"
 FILE_SIZE_REGEX_PATTERN = re.compile(FILE_SIZE_REGEX)
@@ -67,8 +50,9 @@ def mkfile(path, contents, user, group, size):
         # convert size to bytes
         size_in_bytes = file_size_in_bytes(size)
         with open(path, 'wb') as filehandle:
+            content = '\0'
             filehandle.seek(size_in_bytes-1)
-            filehandle.write(bytes('\0', 'UTF-8'))
+            filehandle.write(content.encode('utf-8'))
     else:
         # create file with contents
         with open(path, 'w') as filehandle:
@@ -94,7 +78,7 @@ def mksymlink(target_path, link_path):
 
     os.symlink(target_path, link_path)
 
-def make_forest(contract, root):
+def sow(root, contract):
     """
     Makes a forest of directories, files, symlinks and any other file-like objects
     on the given directory 'root', based on what is specified in the contract.
@@ -108,7 +92,7 @@ def make_forest(contract, root):
         if item_type is 'dir':
 
             mkdir(path_to_item)
-            make_forest(contents, path_to_item)
+            sow(path_to_item, contents)
 
         elif item_type == 'file':
 
@@ -127,10 +111,18 @@ def make_forest(contract, root):
 
             mksymlink(target, path_to_item)
 
-@click.command()
-@click.argument('path_to_contract', type=click.Path(exists=True))
+@click.group()
+def sower():
+
+    pass
+
+@sower.command()
 @click.argument('root', type=click.Path(exists=False))
-def main(path_to_contract, root):
+@click.argument('path_to_contract', type=click.Path(exists=True))
+def farm(root, path_to_contract):
+    """
+    Creates a set of files based on the files specified in this farm
+    """
 
     # load the contract
     contract = None
@@ -142,9 +134,22 @@ def main(path_to_contract, root):
 
         loaded_contract = yaml.load(
             textwrap.dedent(contract),
-            Loader=Loader).get('forester')
+            Loader=Loader)
+        
+        # get root element 'farmer'
+        sower_instructions = loaded_contract.get('sower', {})
+        if not sower_instructions:
+            click.secho('You need to have a root level key called "farmer".', fg='red')
+            return -1
+
+        # get the plan
+        plan = sower_instructions.get('plan')
+        if not plan:
+            click.secho('You need to have a 2nd level key called "plan" under "farmer" with the resources you would like to create.', fg='red')
+            return -1
 
         if loaded_contract:
-            make_forest(loaded_contract, root)
+            sow(root, plan)
+            
         else:
             click.secho('The Contract File is Empty.', fg='red')
