@@ -71,7 +71,7 @@ def createfile(path, size_kb):
     Creates a file with at 'path', with size 'size_kb' 
     """
     
-    chunks = size_kb /(1024*10)
+    chunks = int(size_kb /(1024*10))
     if chunks == 0:
         chunks = 1
     with open(path,"wb") as fh:
