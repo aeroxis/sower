@@ -1,9 +1,9 @@
 """A YAML loader that loads mappings into ordered dictionaries.
 (http://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts)
 """
-
-import yaml
+import os
 import sys
+import yaml
 if float('%d.%d' % sys.version_info[:2]) < 2.7:
     from ordereddict import OrderedDict
 else:
@@ -64,3 +64,19 @@ class SafeDumper(yaml.Dumper):
         self.add_representer(OrderedDict, type(self).represent_ordereddict)
 
     represent_ordereddict = represent_ordereddict
+
+
+def createfile(path, size_kb):
+    """
+    Creates a file with at 'path', with size 'size_kb' 
+    """
+    
+    chunks = size_kb /(1024*10)
+    if chunks == 0:
+        chunks = 1
+    with open(path,"wb") as fh:
+        for iter in range(chunks):
+            numrand = os.urandom(size_kb*1024 / chunks)
+            fh.write(numrand)        
+        numrand = os.urandom(size_kb*1024 % chunks)    
+        fh.write(numrand)

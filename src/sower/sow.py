@@ -10,7 +10,7 @@ import yaml
 
 from sultan.api import Sultan
 
-from sower.utils import Loader
+from sower.utils import Loader, createfile
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 logger = logging.getLogger('farmer')
@@ -47,12 +47,16 @@ def mkdir(path):
 def mkfile(path, contents, user, group, size):
 
     if contents == "!random!":
+
         # convert size to bytes
         size_in_bytes = file_size_in_bytes(size)
-        with open(path, 'wb') as filehandle:
-            content = '\0'
-            filehandle.seek(size_in_bytes-1)
-            filehandle.write(content.encode('utf-8'))
+        size_in_kilobytes = size_in_bytes / 1024
+
+        print('Given Size:          %s' % size)
+        print("Size in 'bytes':     %s" % size_in_bytes)
+        print("Size in 'kilobytes': %s" % size_in_kilobytes)
+        createfile(path, size_in_kilobytes)
+
     else:
         # create file with contents
         with open(path, 'w') as filehandle:
@@ -83,7 +87,6 @@ def perform_sow(root, contract):
     Makes a forest of directories, files, symlinks and any other file-like objects
     on the given directory 'root', based on what is specified in the contract.
     """
-    
     for item, contents in contract.items():
 
         path_to_item = os.path.join(root, item)
