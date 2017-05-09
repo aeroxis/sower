@@ -8,7 +8,9 @@ python:
 install:
 - pip install -r requirements.txt
 - pip install nose
-script: nosetests tests/
+script: 
+-  python setup.py checkdocs
+- nosetests tests/
 deploy:
   provider: pypi
   user: davydany
