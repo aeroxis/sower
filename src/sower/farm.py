@@ -10,7 +10,7 @@ import yaml
 
 from sultan.api import Sultan
 
-from farmer.utils import Loader
+from sower.utils import Loader
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 logger = logging.getLogger('farmer')
@@ -78,7 +78,7 @@ def mksymlink(target_path, link_path):
 
     os.symlink(target_path, link_path)
 
-def make_forest(contract, root):
+def sow(contract, root):
     """
     Makes a forest of directories, files, symlinks and any other file-like objects
     on the given directory 'root', based on what is specified in the contract.
@@ -92,7 +92,7 @@ def make_forest(contract, root):
         if item_type is 'dir':
 
             mkdir(path_to_item)
-            make_forest(contents, path_to_item)
+            sow(contents, path_to_item)
 
         elif item_type == 'file':
 
@@ -111,10 +111,18 @@ def make_forest(contract, root):
 
             mksymlink(target, path_to_item)
 
-@click.command()
-@click.argument('path_to_contract', type=click.Path(exists=True))
+@click.group()
+def farmer():
+
+    pass
+
+@farmer.command()
 @click.argument('root', type=click.Path(exists=False))
-def main(path_to_contract, root):
+@click.argument('path_to_contract', type=click.Path(exists=True))
+def farm(root, path_to_contract):
+    """
+    Creates a set of files based on the files specified in this farm
+    """
 
     # load the contract
     contract = None
@@ -126,9 +134,21 @@ def main(path_to_contract, root):
 
         loaded_contract = yaml.load(
             textwrap.dedent(contract),
-            Loader=Loader).get('farmer')
+            Loader=Loader)
+        
+        # get root element 'farmer'
+        instructions_for_farmer = loaded_contract.get('farmer', {})
+        if not instructions_for_farmer:
+            click.secho('You need to have a root level key called "farmer".', fg='red')
+            return -1
+
+        # get the plan
+        plan = instructions_for_farmer.get('plan')
+        if not plan:
+            click.secho('You need to have a 2nd level key called "plan" under "farmer" with the resources you would like to create.', fg='red')
+            return -1
 
         if loaded_contract:
-            make_forest(loaded_contract, root)
+            sow(plan, root)
         else:
             click.secho('The Contract File is Empty.', fg='red')

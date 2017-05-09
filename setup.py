@@ -7,8 +7,8 @@ with open("./VERSION") as f:
     VERSION = f.read().strip()
 
 setup(
-    name='farmer',
-    description='farmer plants directories, files and symlinks on your filesystem based on a contract you tell it.',
+    name='sower',
+    description='Sower "plants" directories, files and symlinks on your filesystem based on a contract you tell it.',
     long_description=LONG_DESCRIPTION,
     version=VERSION,
     author='David Daniel',
@@ -19,7 +19,7 @@ setup(
     url='http://github.com/aeroxis/farmer',
       entry_points="""
             [console_scripts]
-                farmer = farmer.farm:main
+                sower = sower.farm:sower
       """,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
