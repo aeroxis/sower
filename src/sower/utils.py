@@ -76,7 +76,7 @@ def createfile(path, size_kb):
         chunks = 1
     with open(path,"wb") as fh:
         for iter in range(chunks):
-            numrand = os.urandom(size_kb*1024 / chunks)
+            numrand = os.urandom(int(size_kb*1024 / chunks))
             fh.write(numrand)        
-        numrand = os.urandom(size_kb*1024 % chunks)    
+        numrand = os.urandom(int(size_kb*1024 % chunks))
         fh.write(numrand)
