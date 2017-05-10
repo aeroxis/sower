@@ -51,10 +51,6 @@ def mkfile(path, contents, user, group, size):
         # convert size to bytes
         size_in_bytes = file_size_in_bytes(size)
         size_in_kilobytes = size_in_bytes / 1024
-
-        print('Given Size:          %s' % size)
-        print("Size in 'bytes':     %s" % size_in_bytes)
-        print("Size in 'kilobytes': %s" % size_in_kilobytes)
         createfile(path, size_in_kilobytes)
 
     else:
