@@ -10,7 +10,7 @@ install:
 - pip install nose
 script: 
 -  python setup.py checkdocs
-- nosetests tests/
+- nosetests 
 deploy:
   provider: pypi
   distributions: bdist_wheel
