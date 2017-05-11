@@ -5,7 +5,7 @@ import yaml
 
 from collections import OrderedDict
 
-from sower.utils.yaml import Loader as YAMLLoader
+from sower.utils.yaml_loader import Loader as YAMLLoader
 
 
 class Contract(object):
@@ -13,7 +13,7 @@ class Contract(object):
     def __init__(self, path):
 
         self.path = path
-        self.contract = load_contract_from_file()
+        self.contract = load_contract_from_file(path)
 
     @property
     def plan(self):
@@ -77,7 +77,7 @@ def validate_contract(contract):
     """
     Validates the given contract. Contract must be of type 'dict'.
     """
-    if len(contract) !== 1:
+    if len(contract) != 1:
         raise ValueError('Root Level of Contract must contain '\
             '1 element: sower')
 

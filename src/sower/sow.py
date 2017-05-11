@@ -10,7 +10,8 @@ import yaml
 
 from sultan.api import Sultan
 
-from sower.utils.yaml import Loader
+from sower.contract import Contract
+from sower.utils.yaml_loader import Loader
 from sower.utils.fs import create_random_file
 
 logging.basicConfig(level=logging.DEBUG, format="%(message)s")
@@ -125,31 +126,14 @@ def sow(root, path_to_contract):
     """
 
     # load the contract
-    contract = None
-    with open(path_to_contract) as contract_file:
-        contract = contract_file.read()
+    contract = Contract(path_to_contract)
 
     # make the farm
     if contract:
-
-        loaded_contract = yaml.load(
-            textwrap.dedent(contract),
-            Loader=Loader)
         
         # get root element 'farmer'
-        sower_instructions = loaded_contract.get('sower', {})
-        if not sower_instructions:
-            click.secho('You need to have a root level key called "farmer".', fg='red')
-            return -1
-
-        # get the plan
-        plan = sower_instructions.get('plan')
-        if not plan:
-            click.secho('You need to have a 2nd level key called "plan" under "farmer" with the resources you would like to create.', fg='red')
-            return -1
-
-        if loaded_contract:
+        plan = contract.plan
+        if plan:
             perform_sow(root, plan)
-            
         else:
             click.secho('The Contract File is Empty.', fg='red')

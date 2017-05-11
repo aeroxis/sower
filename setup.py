@@ -6,6 +6,8 @@ with open("./README.rst") as f:
 with open("./VERSION") as f:
     VERSION = f.read().strip()
 
+print("Found Packages: ", find_packages('src'))
+
 setup(
     name='sower',
     description='Sower "plants" directories, files and symlinks on your filesystem based on a contract you tell it.',
@@ -14,11 +16,12 @@ setup(
     author='David Daniel',
     author_email='davydany@aeroxis.com',
     license='MIT',
-    packages=find_packages('src'),
+    packages=find_packages('src', exclude=('tests', )),
     package_dir={'': 'src'},
     install_requires=[
-        'PyYAML==3.12',
+        'PyYAML>=3.12',
         'click>=6.7',
+        'simplejson>=3.10.0'
     ],
     url='http://github.com/aeroxis/sower',
       entry_points="""

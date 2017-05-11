@@ -6,7 +6,8 @@ import unittest
 import yaml
 
 from sower.sow import (file_size_in_bytes, mkdir, mkfile, mksymlink, perform_sow)
-from sower.utils import Loader
+from sower.contract import Contract, load_yaml_data
+from sower.utils.yaml_loader import Loader
 
 
 class TestFileSizeInBytes(unittest.TestCase):
@@ -113,43 +114,41 @@ class TestSow(unittest.TestCase):
     def setUp(self):
 
         self.test_dir = tempfile.mkdtemp('_sower_test')
-        self.contract = yaml.load("""
+        self.contract = load_yaml_data("""
 ---
 sower:
-    plan:
-        bin:
-            start.sh:
-                type: file
-                content: "echo 'Starting foobar'"
-            stop.sh:
-                type: file
-                content: "echo 'Stopping foobar'"
-        data:
-            test-data.tar.gz:
-                type: file
-                content: "!random!"
-                size: 1Mb
-        src:
-            foobar:
-                __init__.py:
-                    type: file
-                    content: "# just a comment"
-                main.py:
-                    type: file
-                    content: >
-                        import os\n
-                        print('Foo Bar: %s' % os.path.abspath('.'))\n\n
-                link_main.py:
-                    type: symlink
-                    target: ../foobar/main.py
-
-        """, Loader=Loader)['sower']['plan']
+  plan:
+    bin:
+      start.sh:
+        type: file
+        content: "echo 'Starting foobar'"
+      stop.sh:
+        type: file
+        content: "echo 'Stopping foobar'"
+    data:
+      test-data.tar.gz:
+        type: file
+        content: "!random!"
+        size: 1Mb
+    src:
+      foobar:
+        __init__.py:
+          type: file
+          content: "# just a comment"
+        main.py:
+          type: file
+          content: >
+            import os\n
+            print('Foo Bar: %s' % os.path.abspath('.'))\n\n
+        link_main.py:
+          type: symlink
+          target: ../foobar/main.py
+        """).get('sower', {}).get('plan')
 
     def tearDown(self):
         
-        # if os.path.exists(self.test_dir):
-        #     shutil.rmtree(self.test_dir)
-        pass
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
 
     def path_to(self, path):
 
