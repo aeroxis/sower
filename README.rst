@@ -44,48 +44,70 @@ The Solution - Part 1
 ---------------------
 
 Sower is the solution for this problem! You simply define a *contract* in
-YAML like the following file:
+YAML or JSON like the following:
 
-.. code:: 
++---------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------+
+| YAML (sower-contract.yml)                                                             + JSON (sower-contract.json)                                                                    +
++=======================================================================================+===============================================================================================+
+|                                                                                       |                                                                                               |
+| .. code::                                                                             | .. code::                                                                                     |
+|                                                                                       |                                                                                               |
+|     ---                                                                               |     {                                                                                         |
+|     sower:                                                                            |         "sower": {                                                                            |
+|         plan:                                                                         |             "plan": {                                                                         |
+|             bin:                                                                      |                 "bin": {                                                                      |
+|                 start.sh:                                                             |                     "start.sh": {                                                             |
+|                     type: file                                                        |                         "type": "file",                                                       |
+|                     content: "echo 'Starting foobar'"                                 |                         "content": "echo'Startingfoobar'"                                     |
+|                 stop.sh:                                                              |                     },                                                                        |
+|                     type: file                                                        |                     "stop.sh": {                                                              |
+|                     content: "echo 'Stopping foobar'"                                 |                         "type": "file",                                                       |
+|             data:                                                                     |                         "content": "echo'Stoppingfoobar'"                                     |
+|                 test-data.tar.gz:                                                     |                     }                                                                         |
+|                     type: file                                                        |                 },                                                                            |
+|                     content: "!random!"                                               |                 "data": {                                                                     |
+|                     size: 1Mb                                                         |                     "test-data.tar.gz": {                                                     |
+|             src:                                                                      |                         "type": "file",                                                       |
+|                 foobar:                                                               |                         "content": "!random!",                                                |
+|                     __init__.py:                                                      |                         "size": "1Mb"                                                         |
+|                         type: file                                                    |                     }                                                                         |
+|                         content: "# just a comment"                                   |                 },                                                                            |
+|                     main.py:                                                          |                 "src": {                                                                      |
+|                         type: file                                                    |                     "foobar": {                                                               |
+|                         content: >                                                    |                         "__init__.py": {                                                      |
+|                             import os\n                                               |                             "type": "file",                                                   |
+|                             print('Foo Bar: %s' % os.path.abspath('.'))\n\n           |                             "content": "#justacomment"                                        |
+|                     link_main.py:                                                     |                         },                                                                    |
+|                         type: symlink                                                 |                         "main.py": {                                                          |
+|                         target: ../foobar/main.py                                     |                             "type": "file",                                                   |
+|                                                                                       |                             "content": "importos\nprint('FooBar: %s'%os.path.abspath('.')\n\n |
+|                                                                                       |                         },                                                                    |
+|                                                                                       |                         "link_main.py": {                                                     |
+|                                                                                       |                             "type": "symlink",                                                |
+|                                                                                       |                             "target": "../foobar/main.py"                                     |
+|                                                                                       |                         }                                                                     |
+|                                                                                       |                     }                                                                         |
+|                                                                                       |                 }                                                                             |
+|                                                                                       |             }                                                                                 |
+|                                                                                       |         }                                                                                     |
+|                                                                                       |     }                                                                                         |
++---------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------+
 
-    ---
-    sower:
-        plan:
-            bin:
-                start.sh:
-                    type: file
-                    content: "echo 'Starting foobar'"
-                stop.sh:
-                    type: file
-                    content: "echo 'Stopping foobar'"
-            data:
-                test-data.tar.gz:
-                    type: file
-                    content: "!random!"
-                    size: 1Mb
-            src:
-                foobar:
-                    __init__.py:
-                        type: file
-                        content: "# just a comment"
-                    main.py:
-                        type: file
-                        content: >
-                            import os\n
-                            print('Foo Bar: %s' % os.path.abspath('.'))\n\n
-                    link_main.py:
-                        type: symlink
-                        target: ../foobar/main.py
-
-Let's call this as `sower-contract.yml`. Now we simply tell Sower where to create these
-files, and the path to this contract.
+Save the Contract to disk (choose either YAML or JSON listing from above). Now 
+we simply tell Sower where to create these files, and the path to this contract.
 
 If we want to create files based on this contract on `/home/davydany/foobar`, we would do 
 the following:
 
+If you chose the YAML, run the following:
 .. code:: bash
 
     $ sower sow /home/davydany/foobar /tmp/sower-contract.yml
+
+If you chose the JSON, run the following:
+.. code:: bash
+
+    $ sower sow /home/davydany/foobar /tmp/sower-contract.json
 
 This would create the following structure:
 
