@@ -140,7 +140,7 @@ You would have something like this in your test's `setUp` method.
 
     import tempfile
     import unittest
-    from sower.farm import perform_sow
+    from sower.sow import perform_sow
 
     class TestMyApp(unittest.TestCase):
 
@@ -178,4 +178,4 @@ You would have something like this in your test's `setUp` method.
                                 type: symlink
                                 target: ../foobar/main.py
             """
-            perform_sow(self.contract, self.root)
+            perform_sow(self.root, self.contract)
