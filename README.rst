@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faeroxis%2Fsower.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Faeroxis%2Fsower?ref=badge_shield)
+
 .. image:: https://raw.githubusercontent.com/aeroxis/sower/master/img/sower-logo.png
     :alt: Sultan logo
     :align: right
@@ -179,3 +181,6 @@ You would have something like this in your test's `setUp` method.
                                 target: ../foobar/main.py
             """
             perform_sow(self.root, self.contract)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faeroxis%2Fsower.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Faeroxis%2Fsower?ref=badge_large)
